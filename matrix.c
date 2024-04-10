@@ -110,6 +110,7 @@ void testDataframe() {
     for (int i = 0; i < df->yCapacity; i++) {
         vector *v = getVectorDataframe(df, i);
         printVector(v);
+        destroyVec(v);
     }
 
     addScalarDataframe(df, 3);
