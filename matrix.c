@@ -62,6 +62,24 @@ void addScalarVector(vector *vec, float scalar) {
     }
 }
 
+void subScalarVector(vector *vec, float scalar) {
+    for (size_t i = 0; i < vec->capacity; i++) {
+        vec->items[i] -= scalar;
+    }
+}
+
+void divScalarVector(vector *vec, float scalar) {
+    for (size_t i = 0; i < vec->capacity; i++) {
+        vec->items[i] /= scalar;
+    }
+}
+
+void multiScalarVector(vector *vec, float scalar) {
+    for (size_t i = 0; i < vec->capacity; i++) {
+        vec->items[i] *= scalar;
+    }
+}
+
 void printVector(vector *vec) {
     printf("[%.2f", vec->items[0]);
     for (size_t i = 1; i < vec->capacity; i++) {
