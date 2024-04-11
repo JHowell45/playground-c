@@ -2,6 +2,27 @@
 #include <stdio.h>
 
 #define VEC_SIZE 5
+
+typedef struct minMax {
+    float min;
+    float max;
+} minMax;
+
+minMax * newMinMax(float min, float max) {
+    minMax *mm = malloc(sizeof(minMax));
+    mm->min = min;
+    mm->max = max;
+    return mm;
+}
+
+void destroyMinMax(minMax *mm) {
+    free(mm);
+}
+
+void printMinMax(minMax *mm) {
+    printf("MinMax { min: %.2f, max: %.2f }\n", mm->min, mm->max);
+}
+
 typedef struct vector {
     size_t capacity;
     float *items;
@@ -102,6 +123,38 @@ float addVectorDataframe(dataframe *df, vector *vec) {
     return 0;
 }
 
+minMax * minMaxValueDataframe(dataframe *df) {
+    float min = getValueDataframe(df, 0, 0);
+    float max = getValueDataframe(df, 0, 0);
+    for (size_t y = 0; y < df->yCapacity; y++) {
+        for (size_t x = 0; x < df->xCapacity; x++) {
+            float temp = getValueDataframe(df, x, y);
+            if (temp < min) {
+                min = temp;
+            }
+            if (temp > max) {
+                max = temp;
+            }
+        }
+    }
+    return newMinMax(min, max);
+}
+
+float normaliseValue(float input, float min, float max) {
+    return (input - min) / (max - min);
+}
+
+void normaliseDataframe(dataframe *df) {
+    minMax *mm = minMaxValueDataframe(df);
+    for (size_t y = 0; y < df->yCapacity; y++) {
+        for (size_t x = 0; x < df->xCapacity; x++) {
+            vector *vec = df->data[y];
+            setValueVector(vec, x, normaliseValue(getValueVector(vec, x), mm->min, mm->max));
+        }
+    }
+    destroyMinMax(mm);
+}
+
 void printDataframe(dataframe *df) {
     for (size_t y = 0; y < df->yCapacity; y++) {
         for (size_t x = 0; x < df->xCapacity; x++) {
@@ -138,9 +191,10 @@ void testDataframe() {
     printVector(vec);
 
     addVectorDataframe(df, vec);
-
     destroyVec(vec);
+    printDataframe(df);
 
+    normaliseDataframe(df);
     printDataframe(df);
 
     destroyDataframe(df);
