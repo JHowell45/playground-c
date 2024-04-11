@@ -132,11 +132,9 @@ void testDataframe() {
         printVector(v);
     }
 
-    // addScalarDataframe(df, 3);
     float arr[VEC_SIZE] = {1,2,3,4,5};
     printf("Vector:\n");
     vector *vec = vecFromArray(arr, VEC_SIZE);
-    // free(arr);
     printVector(vec);
 
     addVectorDataframe(df, vec);
