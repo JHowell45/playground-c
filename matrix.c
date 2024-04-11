@@ -117,6 +117,7 @@ void testVector() {
     printVector(v);
     addScalarVector(v, 3);
     printVector(v);
+    destroyVec(v);
 }
 
 void testDataframe() {
