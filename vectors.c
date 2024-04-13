@@ -22,17 +22,39 @@ void freeVector(vector *v) {
     free(v);
 }
 
+void vectorIncreaseArray(vector *vec) {
+    vec->capacity *= 2;
+    vec->items = realloc(vec->items, vec->capacity);
+}
+
 void vectorPush(vector *vec, int value) {
     vec->length++;
     if (vec->length > vec->capacity) {
-        vec->capacity *= 2;
-        vec->items = realloc(vec->items, vec->capacity);
+        vectorIncreaseArray(vec);
     }
-    vec->items[vec->length-1] = value;
+    vec->items[vec->length - 1] = value;
+}
+
+void vectorInsert(vector *vec, int value, size_t index) {
+    vec->length++;
+    if (vec->length > vec->capacity) {
+        vectorIncreaseArray(vec);
+    }
+    for (size_t i = vec->length - 1; i >= index; i--) {
+        vec->items[i+1] = vec->items[i];
+    }
+    vec->items[index] = value;
 }
 
 void vectorPop(vector *vec) {
     vec->length--;
+}
+
+void vectorRemove(vector *vec, size_t index) {
+    vec->length--;
+    for (size_t i = index; i < vec->length; i++) {
+        vec->items[i] = vec->items[i + 1];
+    }
 }
 
 void vectorPrint(vector *vec) {
@@ -61,6 +83,24 @@ int main(void) {
         vectorPop(vec);
         vectorPrint(vec);
     }
+
+    vectorInsert(vec, 10, 2);
+    vectorPrint(vec);
+
+    vectorInsert(vec, 5, 1);
+    vectorPrint(vec);
+
+    vectorRemove(vec, 0);
+    vectorPrint(vec);
+
+    vectorRemove(vec, 1);
+    vectorPrint(vec);
+
+    vectorRemove(vec, 1);
+    vectorPrint(vec);
+
+    vectorRemove(vec, 1);
+    vectorPrint(vec);
 
     freeVector(vec);
     return 0;
