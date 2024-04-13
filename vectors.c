@@ -9,7 +9,7 @@ typedef struct vector {
     int *items;
 } vector;
 
-vector * newVector() {
+vector * newVector(void) {
     vector *v = malloc(sizeof(vector));
     v->capacity = DEFAULT_VECTOR_CAPACITY;
     v->length = 0;
