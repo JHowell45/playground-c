@@ -73,6 +73,22 @@ void listPush(list *l, int value) {
     l->length++;
 }
 
+void listInsert(list *l, int value, size_t index) {
+    listNode *newNode = newListNode(value);
+    if (index == 0) {
+        newNode->next = l->root;
+        l->root = newNode;
+    } else {
+        listNode *temp = l->root;
+        for (size_t i = 0; i < index - 1; i++) {
+            temp = temp->next;
+        }
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+    l->length++;
+}
+
 void listPop(list *l) {
     if (l->length == 0 && l->root == NULL) {
         return;
@@ -81,6 +97,26 @@ void listPop(list *l) {
         l->root = NULL;
     } else {
         listNodePop(l->root);
+    }
+    l->length--;
+}
+
+void listRemove(list *l, size_t index) {
+    listNode *temp = l->root;
+    if (index == 0) {
+        listNode *newRoot = temp->next;
+        temp->next = NULL;
+        freeListNode(temp);
+        l->root = newRoot;
+    } else {
+        for (size_t i = 1; i < index; i++) {
+            temp = temp->next;
+        }
+        listNode *remove = temp->next;
+        listNode *next = remove->next;
+        remove->next = NULL;
+        temp->next = next;
+        freeListNode(remove);
     }
     l->length--;
 }
@@ -111,6 +147,20 @@ int main(void) {
         listPop(root);
         listPrint(root);
     }
+
+    listInsert(root, 7, 1);
+    listPrint(root);
+    listInsert(root, 10, 0);
+    listPrint(root);
+    listInsert(root, 9, 4);
+    listPrint(root);
+
+    listRemove(root, 0);
+    listPrint(root);
+
+    listRemove(root, 1);
+    listPrint(root);
+
     freeList(root);
     return 0;
 }
