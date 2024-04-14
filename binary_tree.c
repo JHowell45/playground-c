@@ -16,12 +16,18 @@ node * newNode(int data) {
     return n;
 }
 
-void freeNode(node *n) {
+void freeSingleNode(node *n) {
+    n->left = NULL;
+    n->right = NULL;
+    free(n);
+}
+
+void freeAllNodes(node *n) {
     if (n->left != NULL) {
-        freeNode(n->left);
+        freeAllNodes(n->left);
     }
     if (n->right != NULL) {
-        freeNode(n->right);
+        freeAllNodes(n->right);
     }
     free(n);
 }
